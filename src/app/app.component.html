@@ -1,3 +1,77 @@
 <h1>
   {{title}}
 </h1>
+
+<div>
+  <youtube-player *ngIf="_playerController" [ctrl]="_playerController"></youtube-player>
+</div>
+
+<div>
+  <button (click)="_playerController.cmd.play()">Play</button>
+  <button (click)="_playerController.cmd.stop()">Stop</button>
+  <button (click)="_playerController.cmd.pause()">Pause</button>
+</div>
+
+<!--<input ([ngModel])="currentTimer" type="text" />-->
+
+<universal-player></universal-player>
+
+<h3>Annotation</h3>
+<videotagger-annotation></videotagger-annotation>
+
+<h3>Player Mode</h3>
+<ul>
+  <li *ngFor="let mode of modes"><a href="#" (click)="setMode(mode)">{{mode}}</a></li>
+  <li><a href="#" (click)="setMode(null)">Cancel mode</a></li>
+</ul>
+
+<h3>Load video</h3>
+<div>
+  <label class="">Video URL</label>
+  <input type="text" [(ngModel)]="videoUrl" />
+  <button (click)="_playerController.cmd.loadVideoUrl(videoUrl)">Load</button>
+</div>
+
+<div>
+  <label class="">Video ID</label>
+  <input type="text" [(ngModel)]="videoId" />
+  <button (click)="_playerController.cmd.loadVideoId(videoId)">Load</button>
+</div>
+
+<div>
+  <h3>Playlist</h3>
+  <ul>
+    <li *ngFor="let item of _playerController.playlist.items()"><a href="#" (click)="_playerController.cmd.load(item)">{{item}}</a></li>
+  </ul>
+
+  <div>
+    <button (click)="prevVideo()" class="btn btn-primary">PREV</button>
+    <button (click)="nextVideo()" class="btn btn-primary">NEXT</button>
+  </div>
+</div>
+<p>
+  PLAYER: {{_playerController}}
+</p>
+
+
+<h3>Tags</h3>
+
+<form>
+  <div class="form-group">
+    <label class="">Start</label>
+    <input class="form-control" type="number" name="VideoTag.start" [(ngModel)]="newVideoTag.start" />
+  </div>
+  <div class="form-group">
+    <label class="">End</label>
+    <input class="form-control" type="number" name="VideoTag.end" [(ngModel)]="newVideoTag.end" />
+  </div>
+  <div class="form-group">
+    <label class="">Title</label>
+    <input class="form-control" type="text" name="VideoTag.title" [(ngModel)]="newVideoTag.title" />
+  </div>
+
+  <div>
+    <button type="button" class="btn btn-primary" (click)="playVideoTag(newVideoTag)">Test</button>
+    <button type="button" class="btn btn-primary" (click)="addVideoTag(newVideoTag)">Add</button>
+  </div>
+</form>

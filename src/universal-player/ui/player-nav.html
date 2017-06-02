@@ -1,0 +1,20 @@
+<div class="table-current-trick" *ngIf="videoTagData.currentTag">
+    <div class="current-tag" >
+        <div class="current-tag-wrapper">
+            <div video-tag-item video-tag="videoTagData.currentTag">
+            </div>
+        </div>
+    </div>
+    <div
+        *ngIf="videoTagData.currentTag && !playerData.isMode('validation')"
+        class="toggle-player-mode btn-player-nav" 
+        (click)="playerData.toggleLooping()"
+        ng-class="{disabled:!playerData.looping}">
+        <span class="glyphicon glyphicon-repeat text-big" title="Repeat trick"></span>
+    </div>
+    <div class="toggle-list-tricks  btn-player-nav"  
+         *ngIf="!playerData.isMode('validation')"
+         (click)="toggleListTricks()" >
+        <a href="" class="text-big"><span class="glyphicon glyphicon-list"></span></a>
+    </div>
+</div>
