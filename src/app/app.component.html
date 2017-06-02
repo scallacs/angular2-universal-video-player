@@ -7,9 +7,9 @@
 </div>
 
 <div>
-  <button (click)="_playerController.cmd.play()">Play</button>
-  <button (click)="_playerController.cmd.stop()">Stop</button>
-  <button (click)="_playerController.cmd.pause()">Pause</button>
+  <button (click)="_playerController.cmd.play()" class="btn btn-primary">Play</button>
+  <button (click)="_playerController.cmd.stop()" class="btn btn-primary">Stop</button>
+  <button (click)="_playerController.cmd.pause()" class="btn btn-primary">Pause</button>
 </div>
 
 <!--<input ([ngModel])="currentTimer" type="text" />-->
@@ -17,7 +17,7 @@
 <universal-player></universal-player>
 
 <h3>Annotation</h3>
-<videotagger-annotation></videotagger-annotation>
+<videotagger-annotation *ngIf="taggerAnnotationVisible"></videotagger-annotation>
 
 <h3>Player Mode</h3>
 <ul>
@@ -28,14 +28,14 @@
 <h3>Load video</h3>
 <div>
   <label class="">Video URL</label>
-  <input type="text" [(ngModel)]="videoUrl" />
-  <button (click)="_playerController.cmd.loadVideoUrl(videoUrl)">Load</button>
+  <input type="text" [(ngModel)]="videoUrl" class="form-control"/>
+  <button (click)="_playerController.cmd.loadVideoUrl(videoUrl)" class="btn btn-primary">Load</button>
 </div>
 
 <div>
   <label class="">Video ID</label>
-  <input type="text" [(ngModel)]="videoId" />
-  <button (click)="_playerController.cmd.loadVideoId(videoId)">Load</button>
+  <input type="text" [(ngModel)]="videoId" class="form-control" />
+  <button (click)="_playerController.cmd.loadVideoId(videoId)" class="btn btn-primary">Load</button>
 </div>
 
 <div>
