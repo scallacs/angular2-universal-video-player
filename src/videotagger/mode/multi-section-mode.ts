@@ -2,6 +2,35 @@ import { VideoTagModel } from '../model';
 
 import { PlayerMode, CmdMapperInterface, PlayerState } from '../../universal-player';
 
+export interface MultiSectionModeEventInterface{
+
+    onStateChanged(newState: PlayerState);
+
+    onEnter(time: number);
+
+    onLeave(time: number);
+    
+    onProgress(time: number);
+
+    isActive(): boolean;
+};
+
+export class MultiSectionModeModel{
+
+    public id: string;
+    public videoId: string;
+    public startAt: number;
+    public endAt: number;
+    public events: MultiSectionModeEventInterface;
+
+    constructor(id: string, startAt: number, endAt: number, events: MultiSectionModeEventInterface){
+        this.id = id;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.events = events;
+    }
+}
+
 export class MultiSectionMode extends PlayerMode {
     
 
@@ -13,15 +42,20 @@ export class MultiSectionMode extends PlayerMode {
         super();
     }
 
+    get items(){
+        return this._items;
+    }
 
-    public add(videoId: string, id: string, startAt: number, endAt: number, events: any){ 
-        // TODO 
-        this._items.push({ 
-            id: id,
-            startAt: startAt,
-            endAt: endAt,
-            events: events
-        });
+    /**
+     * TODO make it work with video id
+     * @param videoId 
+     * @param id 
+     * @param startAt 
+     * @param endAt 
+     * @param events 
+     */
+    public add(videoId: string, id: string, startAt: number, endAt: number, events: MultiSectionModeEventInterface){ 
+        this._items.push(new MultiSectionModeModel(id, startAt, endAt, events));
     }
 
     public onStateChanged(newState: PlayerState) {
@@ -39,6 +73,8 @@ export class MultiSectionMode extends PlayerMode {
         //console.log("onPlayProgress() => " + time);
         let currentItems = this.getCurrentItems(time);
 
+        let onEnterItems = [];
+
         for (let key in currentItems){
             let currentItem = currentItems[key];
             let exists = this._previousItems[currentItem.id];
@@ -50,7 +86,7 @@ export class MultiSectionMode extends PlayerMode {
             // If item is new => onEnter            
             else {
                 console.log('Entering for ' + currentItem.id);
-                currentItem.events.onEnter(time);
+                onEnterItems.push(currentItem);
             }
 
             delete this._previousItems[currentItem.id];
@@ -61,6 +97,11 @@ export class MultiSectionMode extends PlayerMode {
             let item = this._previousItems[key];
             console.log('Leaving for ' + item.id);
             item.events.onLeave();
+        }
+
+        // OnEnter should be called after on leave
+        for (let item of onEnterItems){
+            item.events.onEnter(time);
         }
 
         this._previousItems = currentItems;

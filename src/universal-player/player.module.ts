@@ -6,6 +6,8 @@ import { UniversalPlayerComponent, UniversalPlayerController } from './provider/
 import { YoutubePlayerComponent, YoutubeCmdMapper } from './provider/youtube';
 import { PlayerController } from './controller/player-controller';
 
+import { CustomPlayerComponent } from './provider/custom';
+
 // Application wide providers
 const APP_PROVIDERS = [
     UniversalPlayerController,
@@ -21,7 +23,8 @@ const APP_PROVIDERS = [
   bootstrap: [  ],
   declarations: [
     UniversalPlayerComponent,
-    YoutubePlayerComponent
+    YoutubePlayerComponent,
+    CustomPlayerComponent
   ],
   imports: [ // import Angular's modules
 //    YoutubePlayerComponent
@@ -31,7 +34,8 @@ const APP_PROVIDERS = [
   ],
   exports: [
     UniversalPlayerComponent,
-    YoutubePlayerComponent
+    YoutubePlayerComponent,
+    CustomPlayerComponent
   ]
 })
 export class PlayerModule {}

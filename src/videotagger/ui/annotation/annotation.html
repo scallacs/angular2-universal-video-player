@@ -1,8 +1,12 @@
-<div class="card" style="width: 20rem;">
-  <img class="card-img-top" src="..." alt="Card image cap">
+<div class="card" [ngClass]="cardStyle" style="width: 20rem;" (click)="_onCardClick()">
+  <img class="card-img-top" *ngIf="model.image" src="{{model.image}}" alt="Card image cap">
   <div class="card-block">
-    <h4 class="card-title">Card title</h4>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <h4 class="card-title">{{model.title}}</h4>
+    <p class="card-text">{{model.content}}</p>
+    <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+
+    <p class="mute">
+      Current time is {{model.time}}
+    </p>
   </div>
 </div>

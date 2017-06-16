@@ -60,7 +60,7 @@ export class YoutubePlayerComponent {
             },
             //height: '100%',
             //width: '100%',
-            videoId: 'M7lc1UVf-VE',
+            videoId: 'V8_wEZD160g',
             events: {
                 onError: (function(data) {
                     that.onError(data);

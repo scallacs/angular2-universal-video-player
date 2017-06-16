@@ -1,0 +1,9 @@
+.menu{
+    background: #555;
+}
+    
+.screen{
+    background: #333;
+    min-width: 600px;
+    min-height: 400px;
+}

@@ -2,76 +2,68 @@
   {{title}}
 </h1>
 
-<div>
-  <youtube-player *ngIf="_playerController" [ctrl]="_playerController"></youtube-player>
-</div>
 
-<div>
-  <button (click)="_playerController.cmd.play()" class="btn btn-primary">Play</button>
-  <button (click)="_playerController.cmd.stop()" class="btn btn-primary">Stop</button>
-  <button (click)="_playerController.cmd.pause()" class="btn btn-primary">Pause</button>
-</div>
+<div class="">
+  <h2 class="">Youtube</h2>
 
+  <div class="row">
+    <div class="col-md-8">
+      <div>
+        <youtube-player *ngIf="_playerController" [ctrl]="_playerController"></youtube-player>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <videotagger-annotation *ngIf="annotationModelBottom" [model]="annotationModelBottom">
+      </videotagger-annotation>
+    </div>
+  </div>
+
+  <div *ngIf="multiSectionMode">
+
+    <div class="row">
+      <div *ngFor="let tag of multiSectionMode.items" class="col-sm-12 col-md-6 col-lg-3">
+        <videotagger-annotation [model]="tag.events.annotation" [cardStyle]="{'active': tag.events.isActive()}" (onCardClick)="onAnnotationCardClick(tag)">
+        </videotagger-annotation>
+      </div>
+    </div>
+
+    <div>
+      <form>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-2 col-form-label">Start</label>
+              <div class="col-10">
+                <input class="form-control" type="number" name="VideoTag.start" [(ngModel)]="newVideoTag.start" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-2 col-form-label">End</label>
+              <div class="col-10">
+                <input class="form-control" type="number" name="VideoTag.end" [(ngModel)]="newVideoTag.end" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">Title</label>
+          <div class="col-10">
+            <input class="form-control" type="text" name="VideoTag.title" [(ngModel)]="newVideoTag.title" />
+          </div>
+        </div>
+
+        <div>
+          <button type="button" class="btn btn-primary" (click)="playVideoTag(newVideoTag)">Test</button>
+          <button type="button" class="btn btn-primary" (click)="addVideoTag(newVideoTag)">Add</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<!--<div>
+  <vimeo-player *ngIf="_playerController" [ctrl]="_playerController"></vimeo-player>
+</div>-->
 <!--<input ([ngModel])="currentTimer" type="text" />-->
-
-<universal-player></universal-player>
-
-<h3>Annotation</h3>
-<videotagger-annotation *ngIf="taggerAnnotationVisible"></videotagger-annotation>
-
-<h3>Player Mode</h3>
-<ul>
-  <li *ngFor="let mode of modes"><a href="#" (click)="setMode(mode)">{{mode}}</a></li>
-  <li><a href="#" (click)="setMode(null)">Cancel mode</a></li>
-</ul>
-
-<h3>Load video</h3>
-<div>
-  <label class="">Video URL</label>
-  <input type="text" [(ngModel)]="videoUrl" class="form-control"/>
-  <button (click)="_playerController.cmd.loadVideoUrl(videoUrl)" class="btn btn-primary">Load</button>
-</div>
-
-<div>
-  <label class="">Video ID</label>
-  <input type="text" [(ngModel)]="videoId" class="form-control" />
-  <button (click)="_playerController.cmd.loadVideoId(videoId)" class="btn btn-primary">Load</button>
-</div>
-
-<div>
-  <h3>Playlist</h3>
-  <ul>
-    <li *ngFor="let item of _playerController.playlist.items()"><a href="#" (click)="_playerController.cmd.load(item)">{{item}}</a></li>
-  </ul>
-
-  <div>
-    <button (click)="prevVideo()" class="btn btn-primary">PREV</button>
-    <button (click)="nextVideo()" class="btn btn-primary">NEXT</button>
-  </div>
-</div>
-<p>
-  PLAYER: {{_playerController}}
-</p>
-
-
-<h3>Tags</h3>
-
-<form>
-  <div class="form-group">
-    <label class="">Start</label>
-    <input class="form-control" type="number" name="VideoTag.start" [(ngModel)]="newVideoTag.start" />
-  </div>
-  <div class="form-group">
-    <label class="">End</label>
-    <input class="form-control" type="number" name="VideoTag.end" [(ngModel)]="newVideoTag.end" />
-  </div>
-  <div class="form-group">
-    <label class="">Title</label>
-    <input class="form-control" type="text" name="VideoTag.title" [(ngModel)]="newVideoTag.title" />
-  </div>
-
-  <div>
-    <button type="button" class="btn btn-primary" (click)="playVideoTag(newVideoTag)">Test</button>
-    <button type="button" class="btn btn-primary" (click)="addVideoTag(newVideoTag)">Add</button>
-  </div>
-</form>

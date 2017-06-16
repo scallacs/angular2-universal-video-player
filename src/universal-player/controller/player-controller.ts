@@ -5,6 +5,9 @@ import { PlayerMode } from '../mode';
 import { PlayerState, Playlist } from '../model';
 import { ObservablePlayerEvent } from './observable-player-event';
 
+/**
+ * TODO add multiple modes
+ */
 export class PlayerController<T> {
 
     protected _playlist: PlaylistInterface<T>;

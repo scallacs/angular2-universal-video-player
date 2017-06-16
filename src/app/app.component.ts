@@ -1,8 +1,27 @@
-import { Inject, Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Inject, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import { UniversalPlayerController, YoutubeCmdMapper, LoopMode, PlayerController, PlayerMode, VideoInfo, Playlist, VideoProvider } from '../universal-player';
+import {
+  PlayerState,
+  UniversalPlayerController,
+  YoutubeCmdMapper,
+  LoopMode,
+  PlayerController,
+  PlayerMode,
+  VideoInfo,
+  Playlist,
+  VideoProvider
+} from '../universal-player';
 
-import { VideoTagModel, VideoTagMode, MultiSectionMode, VideoTaggerPlayerController } from '../videotagger';
+import {
+  VideoTagModel,
+  VideoTagMode,
+  MultiSectionMode,
+  MultiSectionModeModel,
+  MultiSectionModeEventInterface,
+  VideoTaggerPlayerController,
+
+  AnnotationModel
+} from '../videotagger';
 
 import { Subject } from 'rxjs';
 
@@ -12,9 +31,10 @@ import { Subject } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  multiSectionMode: MultiSectionMode;
 
   taggerAnnotationVisible: boolean = false;
-  title = 'app works!';
+  //title = 'app works!';
 
   public currentTimer: number = 0;
   public videoUrl: string;
@@ -22,9 +42,10 @@ export class AppComponent implements OnInit {
   public modes: Array<PlayerMode> = [];
   public newVideoTag: VideoTagModel = new VideoTagModel();
   public _playerController: VideoTaggerPlayerController;
+  public annotationModelBottom: AnnotationModel;
 
 
-  constructor(@Inject(ChangeDetectorRef ) private changeDetectorRef : ChangeDetectorRef) {
+  constructor( @Inject(ChangeDetectorRef) public changeDetectorRef: ChangeDetectorRef) {
     this._playerController = new VideoTaggerPlayerController();
     let ytProvider = new VideoProvider('youtube');
 
@@ -95,7 +116,8 @@ export class AppComponent implements OnInit {
   }
 
   public addVideoTag(newVideoTag: VideoTagModel) {
-    this._playerController.play(newVideoTag);
+    this.multiSectionMode.add("test", Math.random() + "", newVideoTag.begin, newVideoTag.end, SectionAnnotationFactory.create(this, newVideoTag.title, ""));
+    console.log('addVideoTag(): ', newVideoTag);
   }
 
   public playVideoTag(newVideoTag: VideoTagModel) {
@@ -104,29 +126,64 @@ export class AppComponent implements OnInit {
 
   public testTagger(): void {
 
-    let multiSectionMode = new MultiSectionMode();
+    this.multiSectionMode = new MultiSectionMode();
 
-    multiSectionMode.add("test", "ABC", 3, 10, {
-      onEnter: (time) => {
-        // TODO make it visible
-        console.log("VISIBLE");
-        this.taggerAnnotationVisible = true;
-        this.changeDetectorRef.detectChanges();
-      },
-      onLeave: (time) => {
-        // TODO make it invisible
-        console.log("INVISIBLE");
-        this.taggerAnnotationVisible = false;
-        this.changeDetectorRef.detectChanges();
-      },
-      onProgress: (time) => {
-
-      },
-      onStateChanged: (newState: any) => {
-
-      }
-    });
-
-    this._playerController.mode = multiSectionMode;
+    this.multiSectionMode.add("test", "A", 1, 5, SectionAnnotationFactory.create(this, "A from 1 to 5", "This is the ABC content"));
+    this.multiSectionMode.add("test", "B", 7, 13, SectionAnnotationFactory.create(this, "B from 7 to 13", "This is the B content"));
+    this.multiSectionMode.add("test", "C", 13, 20, SectionAnnotationFactory.create(this, "C from 13 to 20", "This is the C content"));
+    
+    this._playerController.mode = this.multiSectionMode;
   }
+
+  public onAnnotationCardClick(model: MultiSectionModeModel){
+    // TODO play this annotation
+    this._playerController.cmd.seekTo(model.startAt);
+    this._playerController.cmd.play();
+  }
+}
+
+class SectionAnnotationFactory {
+
+  public static create(context: AppComponent, title: string, content: string) {
+    return new SectionAnnotation(context, new AnnotationModel(title, content));
+  }
+}
+
+class SectionAnnotation implements MultiSectionModeEventInterface {
+
+  constructor(public context: AppComponent, public annotation: AnnotationModel) {
+
+  }
+
+  onStateChanged(newState: PlayerState) {
+
+  }
+
+  onEnter(time: number) {
+    console.log('SectionAnnotation', 'OnEnter', time)
+    this.context.taggerAnnotationVisible = true;
+    this.context.annotationModelBottom = this.annotation;
+    this.annotation.setTime(time);
+    this.annotation.setActive(true);
+    this.context.changeDetectorRef.detectChanges();
+  }
+
+  onLeave(time: number) {
+    console.log('SectionAnnotation', 'OnLeave', time)
+    this.context.taggerAnnotationVisible = false;
+    this.context.annotationModelBottom = null;
+    this.annotation.setTime(time);
+    this.annotation.setActive(false);
+    this.context.changeDetectorRef.detectChanges();
+  }
+
+  onProgress(time: number) {
+    this.annotation.setTime(time);
+  }
+
+  isActive(): boolean {
+    return this.annotation.active;
+  }
+
+
 }

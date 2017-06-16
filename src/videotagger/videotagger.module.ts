@@ -2,6 +2,7 @@
  * 
  */
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { AnnotationComponent } from './ui';
 
@@ -24,6 +25,7 @@ const VIDEOTAGGER_COMPONENTS = [
   ],
   imports: [ // import Angular's modules
     //    YoutubePlayerComponent
+    CommonModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     VIDEOTAGGER_PROVIDERS

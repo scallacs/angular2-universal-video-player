@@ -1,0 +1,34 @@
+
+<h3>Player Mode</h3>
+<ul>
+  <li *ngFor="let mode of modes"><a href="#" (click)="setMode(mode)">{{mode}}</a></li>
+  <li><a href="#" (click)="setMode(null)">Cancel mode</a></li>
+</ul>
+
+<h3>Load video</h3>
+<div>
+  <label class="">Video URL</label>
+  <input type="text" [(ngModel)]="videoUrl" class="form-control" />
+  <button (click)="_playerController.cmd.loadVideoUrl(videoUrl)" class="btn btn-primary">Load</button>
+</div>
+
+<div>
+  <label class="">Video ID</label>
+  <input type="text" [(ngModel)]="videoId" class="form-control" />
+  <button (click)="_playerController.cmd.loadVideoId(videoId)" class="btn btn-primary">Load</button>
+</div>
+
+<div>
+  <h3>Playlist</h3>
+  <ul>
+    <li *ngFor="let item of _playerController.playlist.items()"><a href="#" (click)="_playerController.cmd.load(item)">{{item}}</a></li>
+  </ul>
+
+  <div>
+    <button (click)="prevVideo()" class="btn btn-primary">PREV</button>
+    <button (click)="nextVideo()" class="btn btn-primary">NEXT</button>
+  </div>
+</div>
+<p>
+  PLAYER: {{_playerController}}
+</p>
