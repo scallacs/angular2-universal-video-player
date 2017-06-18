@@ -5,20 +5,36 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { PlayerModule } from '../universal-player';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './home';
+
+import { PageUniversalPlayerComponent } from './universal-player';
+import { PagePlayerControlComponent } from './player-control';
+import { PageAnnotationComponent } from './annotation';
+
 import { VideoTaggerModule } from '../videotagger';
+
+import { routing } from './app.routes';
+
+const APP_COMPONENTS = [
+    AppComponent,
+    HomeComponent,
+    PageUniversalPlayerComponent,
+    PagePlayerControlComponent,
+    PageAnnotationComponent
+];
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent
+    APP_COMPONENTS
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     PlayerModule,
-    VideoTaggerModule
+    VideoTaggerModule,
+
+    routing
   ],
   providers: [],
   bootstrap: [AppComponent]
